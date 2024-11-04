@@ -1,0 +1,357 @@
+<html><head><base href="/" /><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Beauty Shop</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+:root {
+    --primary: #ff69b4;
+    --secondary: #ffd1dc;
+    --accent: #ff1493;
+    --background: #fff5f8;
+    --text: #333;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: var(--background);
+}
+
+nav {
+    background: white;
+    padding: 1rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--accent);
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.cart-icon {
+    position: relative;
+}
+
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: var(--accent);
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.hero {
+    background: linear-gradient(45deg, var(--secondary), var(--primary));
+    padding: 4rem 2rem;
+    border-radius: 15px;
+    text-align: center;
+    color: white;
+    margin-bottom: 2rem;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.product-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+}
+
+.product-image {
+    width: 100%;
+    height: 200px;
+    background: var(--secondary);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-details {
+    text-align: center;
+}
+
+.product-title {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.product-price {
+    color: var(--accent);
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.add-to-cart {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.add-to-cart:hover {
+    background: var(--primary);
+}
+
+.cart-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100vh;
+    background: white;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+    padding: 2rem;
+    z-index: 1000;
+}
+
+.cart-modal.active {
+    display: block;
+}
+
+.cart-items {
+    margin-top: 2rem;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.cart-total {
+    margin-top: 2rem;
+    text-align: right;
+}
+
+.checkout-btn {
+    width: 100%;
+    padding: 1rem;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin-top: 1rem;
+    cursor: pointer;
+}
+
+.shade-selector {
+    margin: 1rem 0;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.shade {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.shade.selected {
+    border-color: var(--accent);
+}
+</style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">Beauty Shop</div>
+            <div class="nav-links">
+                <div class="cart-icon" id="cartIcon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="hero">
+            <h1>Descubra Sua Beleza Natural</h1>
+            <p>Produtos de alta qualidade para realçar sua beleza única</p>
+        </div>
+
+        <div class="products-grid" id="productsGrid">
+        </div>
+    </div>
+
+    <div class="cart-modal" id="cartModal">
+        <h2>Seu Carrinho</h2>
+        <div class="cart-items" id="cartItems"></div>
+        <div class="cart-total">
+            <h3>Total: R$ <span id="cartTotal">0.00</span></h3>
+            <button class="checkout-btn">Finalizar Compra</button>
+        </div>
+    </div>
+
+<script>
+const products = [
+    {
+        id: 1,
+        name: "Batom Matte",
+        price: 49.90,
+        shades: ["#FF0000", "#FF69B4", "#800000", "#FFB6C1"],
+        description: "Batom de longa duração com acabamento matte"
+    },
+    {
+        id: 2,
+        name: "Base Líquida",
+        price: 89.90,
+        shades: ["#FFE4C4", "#DEB887", "#D2691E", "#8B4513"],
+        description: "Base de alta cobertura para todos os tipos de pele"
+    },
+    {
+        id: 3,
+        name: "Paleta de Sombras",
+        price: 129.90,
+        shades: ["#FFD700", "#FF69B4", "#4B0082", "#000000"],
+        description: "Paleta com 12 cores altamente pigmentadas"
+    },
+    {
+        id: 4,
+        name: "Máscara de Cílios",
+        price: 69.90,
+        shades: ["#000000"],
+        description: "Máscara para volume e alongamento dos cílios"
+    }
+];
+
+let cart = [];
+let selectedShades = {};
+
+function renderProducts() {
+    const productsGrid = document.getElementById('productsGrid');
+    productsGrid.innerHTML = products.map(product => `
+        <div class="product-card">
+            <div class="product-image">
+                <i class="fas fa-pump-soap fa-3x"></i>
+            </div>
+            <div class="product-details">
+                <h3 class="product-title">${product.name}</h3>
+                <p class="product-price">R$ ${product.price.toFixed(2)}</p>
+                <div class="shade-selector">
+                    ${product.shades.map(shade => `
+                        <div class="shade" 
+                             style="background-color: ${shade}"
+                             onclick="selectShade(${product.id}, '${shade}')"
+                             data-product="${product.id}"
+                             data-shade="${shade}">
+                        </div>
+                    `).join('')}
+                </div>
+                <button class="add-to-cart" onclick="addToCart(${product.id})">
+                    Adicionar ao Carrinho
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function selectShade(productId, shade) {
+    selectedShades[productId] = shade;
+    const shades = document.querySelectorAll(`.shade[data-product="${productId}"]`);
+    shades.forEach(s => s.classList.remove('selected'));
+    const selectedShade = document.querySelector(`.shade[data-product="${productId}"][data-shade="${shade}"]`);
+    selectedShade.classList.add('selected');
+}
+
+function addToCart(productId) {
+    const product = products.find(p => p.id === productId);
+    const shade = selectedShades[productId] || product.shades[0];
+    
+    cart.push({
+        ...product,
+        selectedShade: shade
+    });
+    
+    updateCartCount();
+    renderCart();
+}
+
+function updateCartCount() {
+    const cartCount = document.querySelector('.cart-count');
+    cartCount.textContent = cart.length;
+}
+
+function renderCart() {
+    const cartItems = document.getElementById('cartItems');
+    const cartTotal = document.getElementById('cartTotal');
+    
+    cartItems.innerHTML = cart.map(item => `
+        <div class="cart-item">
+            <div class="cart-item-shade" style="background-color: ${item.selectedShade}; width: 20px; height: 20px; border-radius: 50%;"></div>
+            <div class="cart-item-details">
+                <h4>${item.name}</h4>
+                <p>R$ ${item.price.toFixed(2)}</p>
+            </div>
+        </div>
+    `).join('');
+    
+    const total = cart.reduce((sum, item) => sum + item.price, 0);
+    cartTotal.textContent = total.toFixed(2);
+}
+
+document.getElementById('cartIcon').addEventListener('click', () => {
+    const cartModal = document.getElementById('cartModal');
+    cartModal.classList.toggle('active');
+});
+
+// Inicialização
+renderProducts();
+</script>
+</body></html>
